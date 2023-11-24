@@ -13,10 +13,10 @@ export async function register(req: Request, res: Response) {
     }
 
     // Check if user exists
-    const userExists = await User.findOne({ email: email });
+    const emailExists = await User.findOne({ email: email });
 
-    if (userExists) {
-      return res.status(422).json({ msg: 'Por favor, utilize outro e-mail!' });
+    if (emailExists) {
+      return res.status(422).json({ msg: 'E-mail já existente!' });
     }
 
     // Create password hash
@@ -25,7 +25,7 @@ export async function register(req: Request, res: Response) {
 
     // Create user
     const user = new User({
-      name: nome,
+      nome: nome,
       email: email,
       passwordHash: passwordHash,
       telefones: telefones,
