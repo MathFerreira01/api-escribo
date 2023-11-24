@@ -4,7 +4,58 @@ import jwt from 'jsonwebtoken';
 import User from '../models/userModel';
 
 export async function register(req: Request, res: Response) {
-  // ... (o mesmo código que você já possui)
+  try {
+    const { nome, email, senha, telefones } = req.body;
+
+    // Validations
+    if (!nome || !email || !senha || !telefones || telefones.length === 0) {
+      return res.status(422).json({ msg: 'Todos os campos são obrigatórios!' });
+    }
+
+    // Check if user exists
+    const userExists = await User.findOne({ email: email });
+
+    if (userExists) {
+      return res.status(422).json({ msg: 'Por favor, utilize outro e-mail!' });
+    }
+
+    // Create password hash
+    const salt = await bcrypt.genSalt(12);
+    const passwordHash = await bcrypt.hash(senha, salt);
+
+    // Create user
+    const user = new User({
+      name: nome,
+      email: email,
+      passwordHash: passwordHash,
+      telefones: telefones,
+    });
+
+    await user.save();
+
+    // Generate JWT token
+    const secret = process.env.SECRET || '';
+    const token = jwt.sign(
+      {
+        id: user._id,
+      },
+      secret
+    );
+
+    // Format output
+    const output = {
+      id: user._id,
+      data_criacao: user.createdAt,
+      data_atualizacao: user.updatedAt,
+      ultimo_login: user.ultimo_login,
+      token: token,
+    };
+
+    res.status(201).json(output);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ msg: 'Erro interno do servidor' });
+  }
 }
 
 export async function login(req: Request, res: Response) {
