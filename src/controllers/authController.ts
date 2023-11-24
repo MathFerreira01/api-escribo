@@ -39,7 +39,8 @@ export async function register(req: Request, res: Response) {
       {
         id: user._id,
       },
-      secret
+      secret,
+      { expiresIn: '30m' }
     );
 
     // Format output
@@ -91,7 +92,8 @@ export async function login(req: Request, res: Response) {
       {
         id: user._id,
       },
-      secret
+      secret,
+      { expiresIn: '30m' }
     );
 
     // Formatar a resposta
