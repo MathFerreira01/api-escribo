@@ -9,7 +9,8 @@
   "scripts": {
     "dev": "tsx src/server.ts",
     "build": "tsup src",
-    "test": "jest"
+    "test": "jest",
+    "start": "node dist/server.js"
   },
   "keywords": [],
   "author": "",
