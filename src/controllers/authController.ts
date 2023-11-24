@@ -64,7 +64,7 @@ export async function login(req: Request, res: Response) {
 
     // Validations
     if (!email || !senha) {
-      return res.status(422).json({ msg: 'Email e senha são obrigatórios!' });
+      return res.status(401).json({ msg: 'Email e senha são obrigatórios!' });
     }
 
     // Verificar se o usuário existe
@@ -78,7 +78,7 @@ export async function login(req: Request, res: Response) {
     const checkPassword = await bcrypt.compare(senha, user.passwordHash);
 
     if (!checkPassword) {
-      return res.status(422).json({ msg: 'Senha inválida' });
+      return res.status(401).json({ msg: 'Senha inválida' });
     }
 
     // Atualizar a última data de login
