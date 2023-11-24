@@ -2,6 +2,7 @@ import express from 'express';
 import dotenv from 'dotenv';
 import authRoutes from './routes/authRoutes';
 import connectDB from './config/dbConnect';
+import userRoutes from './routes/userRoutes';
 
 dotenv.config();
 
@@ -18,6 +19,7 @@ server.get("/", (req, res) => {
 });
 
 server.use('/auth', authRoutes);
+server.use('/user', userRoutes); 
 
 server.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
